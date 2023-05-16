@@ -1,12 +1,10 @@
-import 'package:flutter/material.dart';
-
 class Category {
   final int categoryId;
   final String title;
-  final String imageUrl;
+  final String? imageUrl;
   final int hasSubcategories;
   final String fullName;
-  final String categoryDescription;
+  final String? categoryDescription;
 
   const Category(
       {required this.categoryId,

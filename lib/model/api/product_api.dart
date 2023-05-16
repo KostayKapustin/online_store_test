@@ -10,14 +10,13 @@ class ProductsApi {
       "appKey":
           "phynMLgDkiG06cECKA3LJATNiUZ1ijs-eNhTf0IGq4mSpJF3bD42MjPUjWwj7sqLuPy4_nBCOyX3-fRiUl6rnoCjQ0vYyKb-LR03x9kYGq53IBQ5SrN8G1jSQjUDplXF"
     };
-    var url = Uri.https(
+    var url = Uri.http(
         "ostest.whitetigersoft.ru", "/api/common/product/list", params);
     final response = await http.get(url);
     final data = jsonDecode(response.body);
     final List<Product> productsList = [];
     var dataJson = data['data'];
-    var productsJson = dataJson['products'];
-    for (var productJson in productsJson) {
+    for (var productJson in dataJson) {
       var product = Product.fromJson(productJson);
       productsList.add(product);
     }
