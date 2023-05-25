@@ -5,10 +5,12 @@ import 'package:online_store_test/view/product_grid_item.dart';
 
 import '../model/api/catalog_api.dart';
 
-
 class CategoryGridItem extends StatefulWidget {
-  const CategoryGridItem({Key? key}) : super(key: key);
+  final Category? category;
+  final String? offset;
 
+  const CategoryGridItem({Key? key, this.category, this.offset})
+      : super(key: key);
   static const routeName = '/categories';
 
   @override
@@ -21,9 +23,13 @@ class _CategoryGridItemState extends State<CategoryGridItem> {
   @override
   void initState() {
     super.initState();
-    CatalogApi().loadCategories().then((res) => setState(() {
-          futureCategory = res;
-        }));
+    CatalogApi()
+        .loadCategories(category: widget.category, offset: widget.offset)
+        .then(
+          (res) => setState(() {
+            futureCategory = res;
+          }),
+        );
   }
 
   @override
@@ -60,14 +66,23 @@ class _CategoryGridItemState extends State<CategoryGridItem> {
             Expanded(
               child: InkWell(
                 onTap: () {
-//TODO: ДЛЯ ПОДКАТЕГОРИЙ НЕТ ПРОВЕРКИ
-                  Navigator.pushNamed(
-                    context,
-                    ProductGridItem.routeName,
-                    arguments: ProductApp(
-                      category: category,
-                    ),
-                  );
+                  if (category.hasSubcategories == null) {
+                    Navigator.pushNamed(
+                      context,
+                      ProductGridItem.routeName,
+                      arguments: ProductApp(
+                        category: category,
+                      ),
+                    );
+                } else {
+                    Navigator.pushNamed(
+                      context,
+                      '/subcategory',
+                      arguments: ProductApp(
+                        category: category,
+                      ),
+                    );
+                  }
                 },
                 child: Container(
                   decoration: BoxDecoration(
@@ -123,4 +138,3 @@ class _CategoryGridItemState extends State<CategoryGridItem> {
     );
   }
 }
-

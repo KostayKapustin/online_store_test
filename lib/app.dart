@@ -6,8 +6,9 @@ import 'package:online_store_test/view/product_grid_item.dart';
 class ProductApp {
 
   final Category category;
+  String? offset;
 
-  ProductApp({required this.category});
+  ProductApp({required this.category, this.offset});
 }
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -27,6 +28,15 @@ class MyApp extends StatelessWidget {
             builder: (context) {
               return ProductGridItem(
                 category: args.category
+              );
+            },
+          );
+        } else if(settings.name == '/subcategory') {
+          final args = settings.arguments as ProductApp;
+          return MaterialPageRoute(
+            builder: (context) {
+              return CategoryGridItem(
+                  category: args.category,
               );
             },
           );
