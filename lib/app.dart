@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:online_store_test/model/category.dart';
-import 'package:online_store_test/view/category_grid_item.dart';
-import 'package:online_store_test/view/product_grid_item.dart';
+import 'package:online_store_test/view/category_page.dart';
+import 'package:online_store_test/view/product_page.dart';
 
 class ProductApp {
-
   final Category category;
-  String? offset;
 
-  ProductApp({required this.category, this.offset});
+  ProductApp({
+    required this.category,
+  });
 }
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -18,29 +19,27 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       initialRoute: '/categories',
       routes: {
-        CategoryGridItem.routeName: (context) =>
-        const CategoryGridItem(),
+        CategoryPage.routeName: (context) => const CategoryPage(),
       },
       onGenerateRoute: (settings) {
-        if (settings.name == ProductGridItem.routeName) {
+        if (settings.name == ProductPage.routeName) {
           final args = settings.arguments as ProductApp;
           return MaterialPageRoute(
             builder: (context) {
-              return ProductGridItem(
-                category: args.category
-              );
+              return ProductPage(category: args.category);
             },
           );
-        } else if(settings.name == '/subcategory') {
+        } else if (settings.name == '/subcategory') {
           final args = settings.arguments as ProductApp;
           return MaterialPageRoute(
             builder: (context) {
-              return CategoryGridItem(
-                  category: args.category,
+              return CategoryPage(
+                category: args.category,
               );
             },
           );
         }
+        return null;
       },
     );
   }

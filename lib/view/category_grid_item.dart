@@ -1,80 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:online_store_test/app.dart';
 import 'package:online_store_test/model/category.dart';
-import 'package:online_store_test/view/product_grid_item.dart';
+import 'package:online_store_test/view/product_page.dart';
 
-import '../model/api/catalog_api.dart';
+class CategoryGridItem extends StatelessWidget {
+  final Category category;
 
-class CategoryGridItem extends StatefulWidget {
-  final Category? category;
-  final String? offset;
-
-  const CategoryGridItem({Key? key, this.category, this.offset})
-      : super(key: key);
-  static const routeName = '/categories';
-
-  @override
-  State<CategoryGridItem> createState() => _CategoryGridItemState();
-}
-
-class _CategoryGridItemState extends State<CategoryGridItem> {
-  late List<Category> futureCategory = [];
-
-  @override
-  void initState() {
-    super.initState();
-    CatalogApi()
-        .loadCategories(category: widget.category, offset: widget.offset)
-        .then(
-          (res) => setState(() {
-            futureCategory = res;
-          }),
-        );
-  }
+  const CategoryGridItem({
+    Key? key,
+    required this.category,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Категории',
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Категории'),
-        ),
-        body: buildCenter(),
-      ),
-    );
+    return buildListItem(context);
   }
 
-  Center buildCenter() {
-    return Center(
-      child: GridView.builder(
-        shrinkWrap: true,
-        itemCount: futureCategory.length,
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2, crossAxisSpacing: 4.0, mainAxisSpacing: 4.0),
-        itemBuilder: (context, index) {
-          Category category = futureCategory[index];
-          return showListTileGrid(category);
-        },
-      ),
-    );
-  }
-
-  Widget showListTileGrid(Category category) => Card(
+  Widget buildListItem(context) => Card(
         child: Column(
           children: [
             Expanded(
               child: InkWell(
                 onTap: () {
-                  if (category.hasSubcategories == null) {
+                  if (category.hasSubcategories == 0) {
                     Navigator.pushNamed(
                       context,
-                      ProductGridItem.routeName,
+                      ProductPage.routeName,
                       arguments: ProductApp(
                         category: category,
                       ),
                     );
-                } else {
+                  } else {
                     Navigator.pushNamed(
                       context,
                       '/subcategory',
@@ -88,20 +44,22 @@ class _CategoryGridItemState extends State<CategoryGridItem> {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15),
                   ),
-                  child: checkImage(category),
+                  child: buildImageView(category),
                 ),
               ),
             ),
             Text(
               category.title,
               style: const TextStyle(
-                  fontSize: 20.0, fontWeight: FontWeight.normal),
+                fontSize: 20.0,
+                fontWeight: FontWeight.normal,
+              ),
             )
           ],
         ),
       );
 
-  Image checkImage(Category category) {
+  Widget buildImageView(Category category) {
     return Image.network(
       category.imageUrl!,
       height: 300,

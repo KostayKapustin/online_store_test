@@ -30,16 +30,20 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
+  json_annotation: ^4.8.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   http: ^0.13.5
+  consumer: ^2.3.0
+  provider: ^3.0.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  build_runner: any
+  json_serializable: ^6.6.0
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -88,3 +92,25 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+targets:
+  $default:
+    builders:
+      json_serializable:
+        options:
+          # Options configure how source code is generated for every
+          # `@JsonSerializable`-annotated class in the package.
+          #
+          # The default value for each is listed.
+          any_map: false
+          checked: false
+          constructor: ""
+          create_factory: true
+          create_field_map: false
+          create_per_field_to_json: false
+          create_to_json: true
+          disallow_unrecognized_keys: false
+          explicit_to_json: false
+          field_rename: none
+          generic_argument_factories: false
+          ignore_unannotated: false
+          include_if_null: true
